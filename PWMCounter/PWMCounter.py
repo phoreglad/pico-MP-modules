@@ -5,7 +5,7 @@ class PWMCounter:
     EDGE_RISING = 2
     EDGE_FALLING = 3
     
-    def __init__(self, pin, condition = "FREE"):
+    def __init__(self, pin, condition = LEVEL_HIGH):
         assert pin < 30 and pin % 2, "Invalid pin number"
         slice_offset = (pin % 16) // 2 * 20
         self._pin_reg = 0x40014000 | (0x04 + pin * 8)
