@@ -1,8 +1,10 @@
 from machine import mem32
 
-_conditions = {"FREE" : 0x0, "GATED" : 0x1, "EDGE_RISING" : 0x2, "EDGE_FALLING" : 0x3}
-
 class PWMCounter:
+    LEVEL_HIGH = 1
+    EDGE_RISING = 2
+    EDGE_FALLING = 3
+    
     def __init__(self, pin, condition = "FREE"):
         assert pin < 30 and pin % 2, "Invalid pin number"
         slice_offset = (pin % 16) // 2 * 20
@@ -17,7 +19,7 @@ class PWMCounter:
         # Set pin to PWM
         mem32[self._pin_reg] = 4
         # Setup PWM counter for selected pin to chosen counter mode
-        mem32[self._csr] = _conditions[self._condition] << 4
+        mem32[self._csr] = self._condition << 4
         self.reset()
     
     def start(self):
@@ -44,7 +46,7 @@ class PWMCounter:
 if __name__ == "__main__":
     from machine import Pin
     output = Pin(2, Pin.OUT)
-    counter = PWMCounter(15, "EDGE_RISING")
+    counter = PWMCounter(15, PWMCounter.EDGE_RISING)
     counter.start()
     for i in range(5):
         output.value(1)
