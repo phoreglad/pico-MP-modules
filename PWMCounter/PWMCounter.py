@@ -39,9 +39,9 @@ class PWMCounter:
         self.reset()
         return tmp
     
-    def set_div(self, div):
-        # This function is quite dumb. Use with care.
-        mem32[self.div] = div
+    def set_div(self, int_ = 1, frac = 0):
+        if int_ == 256: int_ = 0
+        mem32[self._div] = (int_ & 0xff) << 4 | frac & 0xf
 
 if __name__ == "__main__":
     from machine import Pin
